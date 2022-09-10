@@ -3,40 +3,40 @@ from pathlib import Path
 import streamlit as st
 from omegaconf import OmegaConf
 
-from dataset_vis_1d.calculations import get_mean_std
 from dataset_vis_1d.load import load_data, load_labels, array_to_df
+from dataset_vis_1d.modules.dataset_mean import dataset_mean
+from dataset_vis_1d.modules.dataset_statistics import dataset_statistics
+from dataset_vis_1d.modules.sample_choice import sample_choice
 from dataset_vis_1d.utils import check_paths
-from dataset_vis_1d.plots import alt_line_chart_multidim, alt_fill_between_chart_multidim
-
-cfg = OmegaConf.load('config.yaml')
-data_path = Path(cfg.paths.data)
-label_path = Path(cfg.paths.labels)
-
-check_paths(data_path, label_path)
 
 
-data = load_data(data_path)
-labels = load_labels(label_path)
+def main():
+    cfg = OmegaConf.load('config.yaml')
 
-dimensions = [f'dim_{i}' for i in range(data.shape[-1])]
+    # Load data
+    data_path = Path(cfg.paths.data)
+    check_paths(data_path)
+    data = load_data(data_path)
 
-##################################
-st.header("Dataset Visualization")
+    if cfg.paths.labels is not None:
+        label_path = Path(cfg.paths.labels)
+        check_paths(label_path)
+        labels = load_labels(label_path)
+    else:
+        labels = None
 
-mean, var = get_mean_std(data)
+    if hasattr(cfg, 'dimensions'):
+        dimensions = [str(dim) for dim in cfg.dimensions]
+    else:
+        dimensions = [f'dim_{i+1}' for i in range(data.shape[-1])]
 
-mean_df = array_to_df(mean, column_names=dimensions)
-std_df_1 = array_to_df((mean + var), column_names=dimensions)
-std_df_2 = array_to_df((mean - var), column_names=dimensions)
+    ##################################
+    st.header("Dataset Visualization")
 
-st.subheader('Mean and Standard Deviation of the Dimensions')
-selected_dims = st.multiselect('Dimensions to plot', dimensions, default=dimensions)
-
-if selected_dims:
-    mean_chart = alt_line_chart_multidim(mean_df[selected_dims])
-    std_chart = alt_fill_between_chart_multidim(std_df_1[selected_dims], std_df_2[selected_dims], opacity=0.2)
-
-    chart = mean_chart + std_chart
-    st.altair_chart(chart, use_container_width=True)
+    dataset_mean_container = dataset_mean(data, dimensions)
+    dataset_statistics_container = dataset_statistics(data, dimensions)
+    sample_choice_container = sample_choice(data, dimensions, labels)
 
 
+if __name__ == '__main__':
+    main()
