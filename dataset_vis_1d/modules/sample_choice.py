@@ -6,7 +6,7 @@ from dataset_vis_1d.load import array_to_df
 from dataset_vis_1d.plots import alt_line_chart_multidim
 
 
-def sample_choice(data: np.ndarray, dimensions: list[str], label_df: pd.DataFrame = None) -> (st.container, int):
+def sample_choice_module(data: np.ndarray, dimensions: list[str], label_df: pd.DataFrame = None) -> (st.container, int):
 
     container = st.container()
     container.subheader('Sample Visualization')
@@ -19,7 +19,7 @@ def sample_choice(data: np.ndarray, dimensions: list[str], label_df: pd.DataFram
         title_list = []
         columns = label_df.columns.to_list()
         if columns[0] == 'Unnamed: 0':
-            columns[0] = 'Index'
+            columns[0] = 'index'
 
         for la, co in zip(label, columns):
             title_list.append(co + ': ' + str(la))

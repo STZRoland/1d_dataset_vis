@@ -4,9 +4,10 @@ import streamlit as st
 from omegaconf import OmegaConf
 
 from dataset_vis_1d.load import load_data, load_labels, array_to_df
-from dataset_vis_1d.modules.dataset_mean import dataset_mean
-from dataset_vis_1d.modules.dataset_statistics import dataset_statistics
-from dataset_vis_1d.modules.sample_choice import sample_choice
+from dataset_vis_1d.modules.dataset_mean import dataset_mean_module
+from dataset_vis_1d.modules.dataset_statistics import dataset_statistics_module
+from dataset_vis_1d.modules.sample_choice import sample_choice_module
+from dataset_vis_1d.modules.subset_selection import subset_selection_module
 from dataset_vis_1d.utils import check_paths
 
 
@@ -33,9 +34,11 @@ def main():
     ##################################
     st.header("Dataset Visualization")
 
-    dataset_mean_container = dataset_mean(data, dimensions)
-    dataset_statistics_container = dataset_statistics(data, dimensions)
-    sample_choice_container = sample_choice(data, dimensions, labels)
+    with st.sidebar:
+        subset_selection_container, selected_data, selected_labels = subset_selection_module(data, label_df=labels)
+    dataset_mean_container = dataset_mean_module(selected_data, dimensions=dimensions, label_df=selected_labels)
+    dataset_statistics_container = dataset_statistics_module(selected_data, dimensions=dimensions)
+    sample_choice_container = sample_choice_module(selected_data, dimensions=dimensions, label_df=selected_labels)
 
 
 if __name__ == '__main__':

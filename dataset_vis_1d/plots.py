@@ -54,11 +54,11 @@ def alt_multibar_chart_custom(df: pd.DataFrame, columns: st.columns, column_name
     for i, col in enumerate(columns):
 
         chart = alt.Chart(df).mark_bar().encode(
-            x=alt.X('dimensions'),
+            x=alt.X('dim'),
             y=alt.Y(column_names[i], title='',
                     # scale=alt.Scale(domain=(- df[column_names[i]].abs().max(), df[column_names[i]].abs().max()))
                     ),
-            color=alt.Color('dimensions', legend=None),
+            color=alt.Color('dim', legend=None),
             opacity=alt.value(0.7)
         ).properties(
             title=column_names[i]
