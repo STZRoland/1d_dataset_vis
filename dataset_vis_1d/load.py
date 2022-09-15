@@ -1,13 +1,12 @@
 from pathlib import Path
-from typing import Union
 
 import numpy as np
 import pandas as pd
 
-from dataset_vis_1d.utils import convert_channel_last
+from dataset_vis_1d.utils import convert_channel_last, pad_array_list
 
 
-def load_data(path: Path) -> Union[np.ndarray, list[np.ndarray]]:
+def load_data(path: Path) -> np.ndarray:
     if path.is_file():
         data = np.load(str(path))
 
@@ -17,11 +16,23 @@ def load_data(path: Path) -> Union[np.ndarray, list[np.ndarray]]:
         data = convert_channel_last(data)
         return data
 
+    if path.is_dir():
+        files = sorted(path.glob('*.npy'))
 
-def load_labels(path: Path) -> Union[pd.DataFrame, list[pd.DataFrame]]:
+        array_list = []
+        for f in files:
+            array_list.append(np.load(str(f)))
+
+        return pad_array_list(array_list)
+
+
+def load_labels(path: Path) -> pd.DataFrame:
     if path.is_file():
         labels = pd.read_csv(path)
         return labels
+
+    if path.is_dir():
+        raise ValueError('Labels must be provided all in one file.')
 
 
 def array_to_df(data: np.ndarray, column_names: list = None) -> pd.DataFrame:
