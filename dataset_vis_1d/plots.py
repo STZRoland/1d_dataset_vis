@@ -39,7 +39,6 @@ def alt_fill_between_chart_multidim(df_low: pd.DataFrame, df_high: pd.DataFrame,
         x='index',
         y=alt.Y('value', title='value'),
         y2='value_high',
-        # color=alt.Color('dim', scale=alt.Scale(domain=['dim_1', 'dim_2', 'dim_3'])),
         color=alt.Color('dim', scale=color_scale),
         opacity=alt.value(opacity)
     )
@@ -55,9 +54,7 @@ def alt_multibar_chart_custom(df: pd.DataFrame, columns: st.columns, column_name
 
         chart = alt.Chart(df).mark_bar().encode(
             x=alt.X('dim'),
-            y=alt.Y(column_names[i], title='',
-                    # scale=alt.Scale(domain=(- df[column_names[i]].abs().max(), df[column_names[i]].abs().max()))
-                    ),
+            y=alt.Y(column_names[i], title=''),
             color=alt.Color('dim', legend=None),
             opacity=alt.value(0.7)
         ).properties(

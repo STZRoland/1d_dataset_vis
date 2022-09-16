@@ -3,17 +3,20 @@ import pandas as pd
 import streamlit as st
 
 from dataset_vis_1d.load import array_to_df
+from dataset_vis_1d.utils import select_range
 from dataset_vis_1d.plots import alt_line_chart_multidim, alt_fill_between_chart_multidim
 
 
-def dataset_mean_module(data: np.ndarray, dimensions: list[str], container: st.container = None):
+def dataset_mean_module(data: np.ndarray, dimensions: list[str], plot_range: tuple[int, int] = None,
+                        container: st.container = None):
     if container is None:
         container = st.container()
     container.subheader('Mean and Standard Deviation of the Dimensions')
     selected_dims = container.multiselect('Dimensions to plot', dimensions, default=dimensions)
 
-    plot_data = data[:, st.session_state['start_idx']: st.session_state['end_idx']]
-    mean_df, std_df_1, std_df_2 = mean_std_array(plot_data, dimensions)
+    plot_data, indices = select_range(data, plot_range)
+
+    mean_df, std_df_1, std_df_2 = mean_std_array(plot_data, dimensions, indices=indices)
 
     if selected_dims:
         mean_chart = alt_line_chart_multidim(mean_df[selected_dims])
@@ -24,12 +27,12 @@ def dataset_mean_module(data: np.ndarray, dimensions: list[str], container: st.c
 
 
 @st.cache
-def mean_std_array(data: np.ndarray, dimensions: list[str]) -> (pd.DataFrame, pd.DataFrame, pd.DataFrame):
+def mean_std_array(data: np.ndarray, dimensions: list[str], indices: np.ndarray = None) -> (pd.DataFrame, pd.DataFrame, pd.DataFrame):
     mean = np.mean(data, axis=0)
     std = np.std(data, axis=0)
 
-    mean_df = array_to_df(mean, column_names=dimensions)
-    std_df_1 = array_to_df((mean + std), column_names=dimensions)
-    std_df_2 = array_to_df((mean - std), column_names=dimensions)
+    mean_df = array_to_df(mean, column_names=dimensions, indices=indices)
+    std_df_1 = array_to_df((mean + std), column_names=dimensions, indices=indices)
+    std_df_2 = array_to_df((mean - std), column_names=dimensions, indices=indices)
 
     return mean_df, std_df_1, std_df_2

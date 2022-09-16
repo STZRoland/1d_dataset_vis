@@ -35,7 +35,7 @@ def load_labels(path: Path) -> pd.DataFrame:
         raise ValueError('Labels must be provided all in one file.')
 
 
-def array_to_df(data: np.ndarray, column_names: list = None) -> pd.DataFrame:
+def array_to_df(data: np.ndarray, column_names: list = None, indices: np.ndarray = None) -> pd.DataFrame:
     if column_names is None:
         column_names = [f'dim_{i+1}' for i in range(data.shape[-1])]
 
@@ -43,5 +43,8 @@ def array_to_df(data: np.ndarray, column_names: list = None) -> pd.DataFrame:
         data,
         columns=column_names
     )
+
+    if indices is not None:
+        data_df.index = indices
 
     return data_df

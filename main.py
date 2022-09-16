@@ -42,8 +42,6 @@ def main():
     with st.sidebar:
         graph_range_expander = st.expander('Graph range')
         start_idx, end_idx = graph_range_module(data[0].shape, container=graph_range_expander)
-        st.session_state['start_idx'] = start_idx
-        st.session_state['end_idx'] = end_idx
 
         outlier_removal_expander = st.expander('Outlier Removal')
         data, labels = \
@@ -56,9 +54,10 @@ def main():
         normalization_method_expander = st.expander('Normalization Method')
         selected_data = normalization_selection_module(selected_data, data, container=normalization_method_expander)
 
-    dataset_mean_module(selected_data, dimensions=dimensions)
+    dataset_mean_module(selected_data, dimensions=dimensions, plot_range=(start_idx, end_idx))
     dataset_statistics_module(selected_data, dimensions=dimensions)
-    sample_idx = sample_choice_module(selected_data, dimensions=dimensions, label_df=selected_labels)
+    sample_idx = sample_choice_module(selected_data, dimensions=dimensions, label_df=selected_labels,
+                                      plot_range=(start_idx, end_idx))
 
 
 if __name__ == '__main__':

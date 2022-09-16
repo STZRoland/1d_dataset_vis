@@ -24,6 +24,18 @@ def convert_channel_last(data: np.ndarray) -> np.ndarray:
     return data
 
 
+def select_range(data: np.ndarray, data_range: tuple[int, int]) -> (np.ndarray, np.ndarray):
+    if data_range is not None:
+        range_data = data[:, data_range[0]: data_range[1]]
+        indices = np.arange(data_range[0], data_range[1])
+        # plot_data = data[:, st.session_state['start_idx']: st.session_state['end_idx']]
+    else:
+        range_data = data
+        indices = np.arange(0, data.shape[1])
+
+    return range_data, indices
+
+
 def melt_df(df: pd.DataFrame) -> pd.DataFrame:
     return df.reset_index().melt('index', var_name='dim', value_name='value')
 
