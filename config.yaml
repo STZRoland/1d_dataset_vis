@@ -1,7 +1,5 @@
 paths:
-  data: '/Users/rolando/Development/athlete-identification-and-personel-pro-file-creation-based-on-movement-sensor-data/data/processed/diodora/single_stride/lumbar/data.npy'
-  labels: '/Users/rolando/Development/athlete-identification-and-personel-pro-file-creation-based-on-movement-sensor-data/data/processed/diodora/single_stride/lumbar/labels.csv'
-#  data: '/Users/rolando/Development/athlete-identification-and-personel-pro-file-creation-based-on-movement-sensor-data/data/processed/diodora/all_strides/lumbar'
-#  labels: '/Users/rolando/Development/athlete-identification-and-personel-pro-file-creation-based-on-movement-sensor-data/data/processed/diodora/all_strides/lumbar/labels.csv'
+  data: 'path/to/data'  # Either directory that contains .npy files or a single .npy file
+  labels: 'path/to/labels'  # must be a path to singel .csv file or None
 
-dimensions: [x, y, z]
+dimensions: [x, y, z] # Define custom dimension names here
