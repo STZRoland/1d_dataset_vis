@@ -1,5 +1,5 @@
 paths:
   data: 'path/to/data'  # Either directory that contains .npy files or a single .npy file
-  labels: 'path/to/labels'  # must be a path to singel .csv file or None
+  labels: 'path/to/labels'  # must be a path to single .csv file or None
 
 dimensions: [x, y, z] # Define custom dimension names here
