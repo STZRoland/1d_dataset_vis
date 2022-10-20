@@ -26,6 +26,7 @@ def convert_channel_last(data: np.ndarray) -> np.ndarray:
 
 def select_range(data: np.ndarray, data_range: tuple[int, int]) -> (np.ndarray, np.ndarray):
     if data_range is not None:
+        print(data_range)
         range_data = data[:, data_range[0]: data_range[1]]
         indices = np.arange(data_range[0], data_range[1])
         # plot_data = data[:, st.session_state['start_idx']: st.session_state['end_idx']]

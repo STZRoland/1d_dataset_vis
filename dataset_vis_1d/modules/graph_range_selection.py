@@ -18,4 +18,4 @@ def graph_range_module(sample_shape: tuple[int, int], container: st.container = 
 
     end = start + size
 
-    return start, end
+    return int(start), int(end)
